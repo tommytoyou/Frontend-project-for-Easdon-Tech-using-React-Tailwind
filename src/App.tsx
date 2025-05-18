@@ -1,25 +1,27 @@
-import React from "react";
+import { Routes, Route, Link } from 'react-router-dom';
+import Home from './pages/Home';
+import About from './pages/About';
+import Contact from './pages/Contact';
 
-function App() {
+export default function App() {
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-900">
-      <nav className="bg-white shadow p-4 flex justify-between">
-        <h1 className="text-xl font-bold">Easdon Tech</h1>
+    <div className="min-h-screen bg-black text-white p-10">
+      <nav className="bg-white shadow p-4 flex justify-between items-center text-black">
+        <h1 className="text-xl font-bold text-gray-900">Easdon Tech</h1>
         <div className="space-x-4">
-          <a href="#" className="hover:text-blue-600">Home</a>
-          <a href="#" className="hover:text-blue-600">About</a>
-          <a href="#" className="hover:text-blue-600">Contact</a>
+          <Link to="/" className="hover:underline">Home</Link>
+          <Link to="/about" className="hover:underline">About</Link>
+          <Link to="/contact" className="hover:underline">Contact</Link>
         </div>
       </nav>
 
       <main className="p-10 flex flex-col items-center justify-center">
-        <h2 className="text-4xl font-semibold mb-4">Welcome to Easdon Tech</h2>
-        <p className="text-lg text-gray-700">
-          Your React + Tailwind project is fully operational.
-        </p>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
       </main>
     </div>
   );
 }
-
-export default App;

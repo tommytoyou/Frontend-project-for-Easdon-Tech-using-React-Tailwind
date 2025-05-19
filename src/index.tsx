@@ -1,24 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './output.css';
-
 import App from './App';
+import './output.css';
 import { BrowserRouter } from 'react-router-dom';
-import * as serviceWorker from './serviceWorker';
+import { OrdersProvider } from './context/OrdersContext';
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <OrdersProvider>
+        <App />
+      </OrdersProvider>
     </BrowserRouter>
   </React.StrictMode>
 );
-
-serviceWorker.unregister();
 
 
 

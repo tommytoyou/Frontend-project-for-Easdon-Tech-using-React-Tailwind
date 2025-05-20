@@ -13,7 +13,7 @@ export default function Orders() {
     navigate('/receipt', { state: { order } });
   };
 
-  const handleShippingLabel = (order: any) => {
+  const handleShipping = (order: any) => {
     navigate('/shipping-label', { state: { order } });
   };
 
@@ -47,7 +47,7 @@ export default function Orders() {
                   <option value="Complete">Complete</option>
                 </select>
               </td>
-              <td className="px-4 py-2 space-x-2">
+              <td className="px-4 py-2 flex gap-2">
                 <button
                   onClick={() => handlePrint(order)}
                   className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"
@@ -55,10 +55,10 @@ export default function Orders() {
                   Print
                 </button>
                 <button
-                  onClick={() => handleShippingLabel(order)}
+                  onClick={() => handleShipping(order)}
                   className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded"
                 >
-                  Print Label
+                  Shipping Label
                 </button>
               </td>
             </tr>

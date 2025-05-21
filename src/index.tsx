@@ -1,21 +1,18 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-import './output.css';
-import { BrowserRouter } from 'react-router-dom';
-import { OrdersProvider } from './context/OrdersContext';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import "./index.css";
+import { BrowserRouter } from "react-router-dom";
+import { UserRoleProvider } from "./context/UserRoleContext";
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+const root = ReactDOM.createRoot(document.getElementById("root")!);
 
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <OrdersProvider>
+      <UserRoleProvider>
         <App />
-      </OrdersProvider>
+      </UserRoleProvider>
     </BrowserRouter>
   </React.StrictMode>
 );
-
-
-

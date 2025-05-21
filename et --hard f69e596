@@ -1,0 +1,11 @@
+[33m3216c22[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m Ensure index.tsx is tracked
+[33mf69e596[m[33m ([m[1;31morigin/main[m[33m)[m Add admin dashboard with summary cards and mock orders
+[33m1ce4df4[m Add new pages: GuestOrder, CreateProject, BarcodePrint, SearchByBarcode, ShippingLabelEntry, NewCustomerOrder; update App.tsx routes
+[33m201a11b[m Finalize all updates: auto-print fixes, shipping label, receipt, and overall enhancements
+[33m6141e6f[m Added shipping label with auto-print fix and route setup
+[33m3976ca8[m Fix Netlify 404 on refresh with _redirects file
+[33m929203c[m Added order status updates with persistent context via localStorage
+[33m1e6efda[m Connected order context to Orders page and cleaned up components
+[33m2396b14[m Updated front-end scaffold with routing and placeholder pages
+[33ma23f9f9[m Initial commit - Easdon Tech setup with React, Tailwind, Router
+[33m1fc171c[m Initial commit

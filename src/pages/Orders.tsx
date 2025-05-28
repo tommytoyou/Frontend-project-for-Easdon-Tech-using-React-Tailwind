@@ -1,70 +1,64 @@
-import { useOrders } from '../context/OrdersContext';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-export default function Orders() {
-  const { orders, updateOrderStatus } = useOrders();
-  const navigate = useNavigate();
+interface Bolt {
+  treatment: string;
+  barcode?: string;
+}
 
-  const handleStatusChange = (id: string, newStatus: 'Pending' | 'Shipped' | 'Complete') => {
-    updateOrderStatus(id, newStatus);
-  };
+interface Order {
+  _id: string;
+  customerName: string;
+  bolts: Bolt[];
+  createdAt: string;
+}
 
-  const handlePrint = (order: any) => {
-    navigate('/receipt', { state: { order } });
-  };
+const Orders: React.FC = () => {
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleShipping = (order: any) => {
-    navigate('/shipping-label', { state: { order } });
-  };
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/orders');
+        setOrders(response.data);
+        setLoading(false);
+      } catch (error: any) {
+        console.error('Failed to fetch orders:', error.message);
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
 
   return (
-    <div className="p-6 bg-gray-900 text-white min-h-screen">
-      <h1 className="text-3xl font-bold mb-6">All Orders</h1>
-      <table className="w-full table-auto bg-gray-800 rounded overflow-hidden">
-        <thead>
-          <tr className="bg-gray-700 text-left text-sm uppercase text-gray-300">
-            <th className="px-4 py-2">Order ID</th>
-            <th className="px-4 py-2">Customer</th>
-            <th className="px-4 py-2">Date</th>
-            <th className="px-4 py-2">Status</th>
-            <th className="px-4 py-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
+    <div className="p-4">
+      <h2 className="text-xl font-bold mb-4">Submitted Orders</h2>
+      {loading ? (
+        <p>Loading orders...</p>
+      ) : orders.length === 0 ? (
+        <p>No orders found.</p>
+      ) : (
+        <div className="space-y-4">
           {orders.map((order) => (
-            <tr key={order.id} className="border-b border-gray-700 text-sm">
-              <td className="px-4 py-2">{order.id}</td>
-              <td className="px-4 py-2">{order.customer}</td>
-              <td className="px-4 py-2">{order.date}</td>
-              <td className="px-4 py-2">
-                <select
-                  value={order.status}
-                  onChange={(e) => handleStatusChange(order.id, e.target.value as any)}
-                  className="bg-gray-700 text-white rounded px-2 py-1"
-                >
-                  <option value="Pending">Pending</option>
-                  <option value="Shipped">Shipped</option>
-                  <option value="Complete">Complete</option>
-                </select>
-              </td>
-              <td className="px-4 py-2 flex gap-2">
-                <button
-                  onClick={() => handlePrint(order)}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded"
-                >
-                  Print
-                </button>
-                <button
-                  onClick={() => handleShipping(order)}
-                  className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded"
-                >
-                  Shipping Label
-                </button>
-              </td>
-            </tr>
+            <div key={order._id} className="border p-4 rounded shadow">
+              <p className="font-semibold">Customer: {order.customerName}</p>
+              <p className="text-sm text-gray-500 mb-2">Date: {new Date(order.createdAt).toLocaleString()}</p>
+              <ul className="list-disc pl-5">
+                {order.bolts.map((bolt, index) => (
+                  <li key={index}>
+                    Treatment: {bolt.treatment}{" "}
+                    {bolt.barcode && <span className="text-gray-500">(Barcode: {bolt.barcode})</span>}
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
-        </tbody>
-      </table>
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default Orders;

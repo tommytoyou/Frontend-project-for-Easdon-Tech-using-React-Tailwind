@@ -20,8 +20,11 @@ const Orders: React.FC = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/orders');
-        setOrders(response.data);
+       const response = await axios.get<Order[]>('http://localhost:5000/api/orders');
+const data = response.data;
+setOrders(data);
+
+        setOrders(data);
         setLoading(false);
       } catch (error: any) {
         console.error('Failed to fetch orders:', error.message);
@@ -44,12 +47,18 @@ const Orders: React.FC = () => {
           {orders.map((order) => (
             <div key={order._id} className="border p-4 rounded shadow">
               <p className="font-semibold">Customer: {order.customerName}</p>
-              <p className="text-sm text-gray-500 mb-2">Date: {new Date(order.createdAt).toLocaleString()}</p>
+              <p className="text-sm text-gray-500 mb-2">
+                Date: {new Date(order.createdAt).toLocaleString()}
+              </p>
               <ul className="list-disc pl-5">
                 {order.bolts.map((bolt, index) => (
                   <li key={index}>
-                    Treatment: {bolt.treatment}{" "}
-                    {bolt.barcode && <span className="text-gray-500">(Barcode: {bolt.barcode})</span>}
+                    Treatment: {bolt.treatment}{' '}
+                    {bolt.barcode && (
+                      <span className="text-gray-500">
+                        (Barcode: {bolt.barcode})
+                      </span>
+                    )}
                   </li>
                 ))}
               </ul>

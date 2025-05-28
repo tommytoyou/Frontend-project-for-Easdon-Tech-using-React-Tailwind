@@ -1,24 +1,39 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 
 interface FabricBolt {
   treatment: string;
-  barcode?: string;
+  barcode: string;
 }
 
 const GuestOrder: React.FC = () => {
   const [fabricBolts, setFabricBolts] = useState<FabricBolt[]>([
-    { treatment: '', barcode: '' },
+    { treatment: '', barcode: generateBarcode() },
   ]);
 
-  const handleBoltChange = (index: number, field: keyof FabricBolt, value: string) => {
+  function generateBarcode(): string {
+    return `FAB-${new Date()
+      .toISOString()
+      .replace(/[-T:.Z]/g, '')
+      .slice(0, 14)}-${uuidv4().slice(0, 6).toUpperCase()}`;
+  }
+
+  const handleBoltChange = (
+    index: number,
+    field: keyof FabricBolt,
+    value: string
+  ) => {
     const updatedBolts = [...fabricBolts];
     updatedBolts[index][field] = value;
     setFabricBolts(updatedBolts);
   };
 
   const addBolt = () => {
-    setFabricBolts([...fabricBolts, { treatment: '', barcode: '' }]);
+    setFabricBolts([
+      ...fabricBolts,
+      { treatment: '', barcode: generateBarcode() },
+    ]);
   };
 
   const handleSubmit = async () => {
@@ -28,7 +43,11 @@ const GuestOrder: React.FC = () => {
         bolts: fabricBolts,
       };
 
-      const response = await axios.post('http://localhost:5000/api/orders', payload);
+      const response = await axios.post(
+        'http://localhost:5000/api/orders',
+        payload
+      );
+
       alert('Order submitted successfully!');
       console.log(response.data);
     } catch (error: any) {
@@ -46,12 +65,12 @@ const GuestOrder: React.FC = () => {
             type="text"
             placeholder="Treatment"
             value={bolt.treatment}
-            onChange={(e) => handleBoltChange(index, 'treatment', e.target.value)}
+            onChange={(e) =>
+              handleBoltChange(index, 'treatment', e.target.value)
+            }
             className="border p-2 rounded w-1/2"
           />
-          <span className="text-sm text-gray-500">
-            {bolt.barcode || 'No barcode yet'}
-          </span>
+          <span className="text-sm text-gray-500">{bolt.barcode}</span>
         </div>
       ))}
 

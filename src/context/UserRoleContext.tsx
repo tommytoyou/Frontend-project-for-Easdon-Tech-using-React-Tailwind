@@ -1,4 +1,9 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface UserRoleContextType {
@@ -17,11 +22,13 @@ export const useUserRole = () => {
   return context;
 };
 
-export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+const UserRoleProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [role, setRole] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const loginAsAdmin = () => setRole('admin');
+  const loginAsAdmin = () => {
+    setRole('admin');
+  };
 
   const logout = () => {
     setRole(null);
@@ -34,3 +41,5 @@ export const AdminProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     </UserRoleContext.Provider>
   );
 };
+
+export default UserRoleProvider;

@@ -4,16 +4,19 @@ import axios from 'axios';
 const GuestOrder: React.FC = () => {
   const [customerName, setCustomerName] = useState('');
   const [treatment, setTreatment] = useState('');
+  const [barcode, setBarcode] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const order = {
+      customerName,
+      bolts: [{ treatment, barcode }],
+    };
+
     try {
-      await axios.post('http://localhost:5000/api/orders', {
-        customerName,
-        bolts: [{ treatment }],
-      });
+      await axios.post('http://localhost:5000/api/orders', order);
       setSubmitted(true);
     } catch (error) {
       console.error('Order submission failed:', error);
@@ -33,7 +36,7 @@ const GuestOrder: React.FC = () => {
               type="text"
               value={customerName}
               onChange={(e) => setCustomerName(e.target.value)}
-              className="w-full p-2 text-black rounded"
+              className="w-full p-2 bg-white text-black border border-gray-300 rounded"
               required
             />
           </div>
@@ -43,8 +46,7 @@ const GuestOrder: React.FC = () => {
               type="text"
               value={treatment}
               onChange={(e) => setTreatment(e.target.value)}
-              className="w-full p-2 text-black rounded"
-              required
+              className="w-full p-2 bg-white text-black border border-gray-300 rounded"
             />
           </div>
           <button

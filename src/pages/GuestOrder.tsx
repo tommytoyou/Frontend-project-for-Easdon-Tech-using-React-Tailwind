@@ -1,92 +1,60 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
-
-interface FabricBolt {
-  treatment: string;
-  barcode: string;
-}
 
 const GuestOrder: React.FC = () => {
-  const [fabricBolts, setFabricBolts] = useState<FabricBolt[]>([
-    { treatment: '', barcode: generateBarcode() },
-  ]);
+  const [customerName, setCustomerName] = useState('');
+  const [treatment, setTreatment] = useState('');
+  const [submitted, setSubmitted] = useState(false);
 
-  function generateBarcode(): string {
-    return `FAB-${new Date()
-      .toISOString()
-      .replace(/[-T:.Z]/g, '')
-      .slice(0, 14)}-${uuidv4().slice(0, 6).toUpperCase()}`;
-  }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  const handleBoltChange = (
-    index: number,
-    field: keyof FabricBolt,
-    value: string
-  ) => {
-    const updatedBolts = [...fabricBolts];
-    updatedBolts[index][field] = value;
-    setFabricBolts(updatedBolts);
-  };
-
-  const addBolt = () => {
-    setFabricBolts([
-      ...fabricBolts,
-      { treatment: '', barcode: generateBarcode() },
-    ]);
-  };
-
-  const handleSubmit = async () => {
     try {
-      const payload = {
-        customerName: 'Guest',
-        bolts: fabricBolts,
-      };
-
-      const response = await axios.post(
-        'http://localhost:5000/api/orders',
-        payload
-      );
-
-      alert('Order submitted successfully!');
-      console.log(response.data);
-    } catch (error: any) {
-      console.error('Order submission failed:', error.message);
-      alert('Failed to submit order.');
+      await axios.post('http://localhost:5000/api/orders', {
+        customerName,
+        bolts: [{ treatment }],
+      });
+      setSubmitted(true);
+    } catch (error) {
+      console.error('Order submission failed:', error);
     }
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Guest Order</h2>
-      {fabricBolts.map((bolt, index) => (
-        <div key={index} className="mb-2 flex items-center space-x-2">
-          <input
-            type="text"
-            placeholder="Treatment"
-            value={bolt.treatment}
-            onChange={(e) =>
-              handleBoltChange(index, 'treatment', e.target.value)
-            }
-            className="border p-2 rounded w-1/2"
-          />
-          <span className="text-sm text-gray-500">{bolt.barcode}</span>
-        </div>
-      ))}
-
-      <button
-        className="bg-green-500 text-white px-4 py-2 rounded mt-2"
-        onClick={addBolt}
-      >
-        Add Fabric Bolt
-      </button>
-
-      <button
-        className="bg-blue-600 text-white px-6 py-2 mt-4 rounded block"
-        onClick={handleSubmit}
-      >
-        Submit Order
-      </button>
+    <div className="min-h-screen bg-gray-900 text-white p-6">
+      <h2 className="text-2xl font-bold mb-4">Guest Order</h2>
+      {submitted ? (
+        <p className="text-green-400">Order submitted successfully!</p>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block mb-1">Customer Name</label>
+            <input
+              type="text"
+              value={customerName}
+              onChange={(e) => setCustomerName(e.target.value)}
+              className="w-full p-2 text-black rounded"
+              required
+            />
+          </div>
+          <div>
+            <label className="block mb-1">Treatment</label>
+            <input
+              type="text"
+              value={treatment}
+              onChange={(e) => setTreatment(e.target.value)}
+              className="w-full p-2 text-black rounded"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
+          >
+            Submit Order
+          </button>
+        </form>
+      )}
     </div>
   );
 };

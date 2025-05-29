@@ -68,7 +68,7 @@ const GuestOrder: React.FC = () => {
             onChange={(e) =>
               handleBoltChange(index, 'treatment', e.target.value)
             }
-            className="border p-2 rounded w-1/2"
+            className="border border-black rounded px-2 py-1 bg-green-300"
           />
           <span className="text-sm text-gray-500">{bolt.barcode}</span>
         </div>

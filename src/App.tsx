@@ -67,6 +67,8 @@ export default function App() {
           <Route path="/receipt" element={<ProtectedRoute><Receipt /></ProtectedRoute>} />
           <Route path="/create-project" element={<ProtectedRoute><CreateProject /></ProtectedRoute>} />
           <Route path="/shipping-entry" element={<ProtectedRoute><ShippingLabelEntry /></ProtectedRoute>} />
+          <Route path="/new-order" element={<ProtectedRoute><NewOrder /></ProtectedRoute>} />
+          <Route path="/customer-orders" element={<ProtectedRoute><CustomerOrders /></ProtectedRoute>} />
 
           {/* 🟢 Public Routes */}
           <Route path="/about" element={<About />} />
@@ -77,6 +79,7 @@ export default function App() {
           <Route path="/search-barcode" element={<SearchByBarcode />} />
           <Route path="/new-customer-order" element={<NewCustomerOrder />} />
           <Route path="/access-denied" element={<AccessDenied />} /> {/* ✅ NEW */}
+ 
         </Routes>
       </main>
     </div>

@@ -1,0 +1,9 @@
+# Query: Login as Admin
+# ContextLines: 1
+
+1 result - 1 file
+
+src\App.tsx:
+  54          >
+  55:           {token ? "Logout" : "Login"}
+  56          </button>
